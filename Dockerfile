@@ -1,4 +1,4 @@
-# builder :: used to build the binary
+# multi-stage build feature
 FROM rust AS builder
 
 COPY . /app
@@ -6,8 +6,7 @@ WORKDIR /app
 RUN cargo build --release
 
 # we only need the packaged app from the builder
-FROM debian:buster-slim
-COPY --from=builder /app/target/release/actix-web-api /app/actix-web-api
+FROM scratch
 WORKDIR /app
-
-CMD ["./actix-web-api"]
+COPY --from=builder /app/target/release/actix-web-api actix-web-api
+ENTRYPOINT ["./actix-web-api"]

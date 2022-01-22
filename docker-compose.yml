@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: rusty-dusty
+        volumes:
+            - .:/app
+            - cargo-cache:/rust/cargo
+        environment:
+            - "TZ=Europe/Finland"
+        ports:
+            - 8080:8080
+        restart: unless-stopped
+        working_dir: /app
+        tty: true
+        healthcheck:
+            test: curl --fail -s http://localhost:8080/json || exit 1
+            interval: 10s
+            timeout: 1s
+            retries: 2
+volumes:
+    cargo-cache:

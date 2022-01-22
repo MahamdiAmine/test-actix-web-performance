@@ -10,6 +10,7 @@ async fn hello_json() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Server is running ...");
     HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(hello))
